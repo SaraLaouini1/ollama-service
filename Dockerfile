@@ -6,14 +6,17 @@ RUN apt-get update \
  && apt-get install -y curl unzip \
  && curl -sL https://ollama.com/install.sh | bash
 
+# Tell Ollama to bind on all interfaces at port 11434
+ENV OLLAMA_HOST=0.0.0.0:11434
+# Expose the same port
 EXPOSE 11434
 
-# Start the daemon first, wait for it, then pull your model, then keep it running
+# Start the Ollama daemon, wait until it’s ready, then pull the model
 CMD ["bash","-lc", "\
-  ollama serve --host 0.0.0.0 --port 11434 & \
-  # wait until Ollama API is up: \
+  ollama serve & \
+  # wait for Ollama to be up:
   until curl -s http://127.0.0.1:11434; do sleep 1; done; \
   ollama pull mistral:latest; \
-  # now wait on the background serve process so container doesn’t exit \
+  # block on the serve process so the container stays alive
   wait \
 "]
