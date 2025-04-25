@@ -1,16 +1,14 @@
-# Use a minimal base
+# ollama-service/Dockerfile
 FROM ubuntu:22.04
 
-# Install dependencies & Ollama
-RUN apt-get update && \
-    apt-get install -y curl unzip && \
-    curl -sL https://ollama.com/install.sh | bash
+# Install Ollama dependencies & CLI
+RUN apt-get update && apt-get install -y curl unzip \
+ && curl -sL https://ollama.com/install.sh | bash
 
-# Pull the model you’ll use
-RUN ollama pull mistral:latest
-
-# Expose Ollama’s default port
+# Expose the LLM port
 EXPOSE 11434
 
-# Start Ollama
-CMD ["ollama", "serve", "--host", "0.0.0.0", "--port", "11434"]
+# On container start:
+#  1. Pull the model (daemon is launched automatically by ollama CLI if needed)
+#  2. Serve on 0.0.0.0:11434
+CMD ["bash","-lc","ollama pull mistral:latest && ollama serve --host 0.0.0.0 --port 11434"]
