@@ -16,7 +16,7 @@ CMD ["bash","-lc", "\
   ollama serve & \
   # wait for Ollama to be up:
   until curl -s http://127.0.0.1:11434; do sleep 1; done; \
-  ollama pull llama3.2:1b; \
+  ollama pull smollm:360m; \
   # block on the serve process so the container stays alive
   wait \
 "]
