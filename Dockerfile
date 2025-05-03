@@ -1,5 +1,3 @@
-# ollama-service/Dockerfile
-
 FROM ubuntu:22.04
 
 # Install Curl & Unzip for the Ollama installer
@@ -7,18 +5,17 @@ RUN apt-get update && \
     apt-get install -y curl unzip && \
     rm -rf /var/lib/apt/lists/*
 
-# Install the Ollama CLI
-RUN curl -sL https://ollama.com/install.sh | bash
+# Install Ollama
+RUN curl -fsSL https://ollama.com/install.sh | bash
 
-# Tell Ollama to bind to 0.0.0.0:11434
+# Set host binding
 ENV OLLAMA_HOST=0.0.0.0:11434
 
-# Copy in your fine‑tuned model under the extractor:latest tag
-COPY --chown=ollama:ollama models/extractor:latest \
-     /home/ollama/.ollama/models/extractor:latest
+# Copy your model into Ollama's model storage
+COPY models/extractor:latest /root/.ollama/models/extractor:latest
 
-# Expose the Ollama port
+# Expose the Ollama API port
 EXPOSE 11434
 
-# Launch Ollama serving your extractor:latest model
-ENTRYPOINT ["ollama", "serve", "extractor:latest"]
+# Start the Ollama server (don't pass model name here)
+ENTRYPOINT ["ollama", "serve"]
