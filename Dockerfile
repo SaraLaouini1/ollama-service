@@ -8,6 +8,9 @@ RUN apt-get update && \
 # Install Ollama
 RUN curl -fsSL https://ollama.com/install.sh | bash
 
+# Preload your fine-tuned model so it's available at startup
+RUN ollama pull extractor:latest || echo "Model extractor:latest already present"
+
 # Set host binding
 ENV OLLAMA_HOST=0.0.0.0:11434
 
