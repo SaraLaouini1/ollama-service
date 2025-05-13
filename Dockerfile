@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 # 2) Copy your fine-tuned model artifacts
 #    Make sure your host dir is exactly 'models/extractor:latest'
-COPY ["models/extractor:latest", "/root/.ollama/models/extractor:latest"]
+COPY ["models/extractor_latest", "/root/.ollama/models/extractor_latest"]
 
 # 3) Bind to all interfaces
 ENV OLLAMA_HOST=0.0.0.0:11434
